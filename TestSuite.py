@@ -2,8 +2,19 @@ import unittest
 from TestUtils import TestUtils
 
 
+from SymbolTable import *
+
+
 class TestSymbolTable(unittest.TestCase):
     def test_0(self):
+        print(simulate([
+            "INSERT x number",
+            "INSERT y string",
+            "BEGIN",
+            "INSERT x number",
+            "INSERT z number",
+            "PRINT",
+            "END"]))
         input = ["INSERT a1 number", "INSERT b2 string"]
         expected = ["success", "success"]
 
