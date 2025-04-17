@@ -7,14 +7,6 @@ from SymbolTable import *
 
 class TestSymbolTable(unittest.TestCase):
     def test_0(self):
-        print(simulate([
-            "INSERT x number",
-            "INSERT y string",
-            "BEGIN",
-            "INSERT x number",
-            "INSERT z number",
-            "PRINT",
-            "END"]))
         input = ["INSERT a1 number", "INSERT b2 string"]
         expected = ["success", "success"]
 
@@ -22,7 +14,7 @@ class TestSymbolTable(unittest.TestCase):
 
     def test_1(self):
         input = ["INSERT x number", "INSERT y string", "INSERT x string"]
-        expected = ["Redeclared: INSERT x string"]
+        expected = ["success", "success", "Redeclared: INSERT x string"]
 
         self.assertTrue(TestUtils.check(input, expected, 101))
 
@@ -34,7 +26,7 @@ class TestSymbolTable(unittest.TestCase):
             "ASSIGN y 17",
             "ASSIGN x 'abc'",
         ]
-        expected = ["TypeMismatch: ASSIGN y 17"]
+        expected = ["success", "success", "success", "TypeMismatch: ASSIGN y 17", "TypeMismatch: ASSIGN x 'abc'"]
 
         self.assertTrue(TestUtils.check(input, expected, 102))
 

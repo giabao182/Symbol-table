@@ -2,6 +2,33 @@ from StaticError import *
 from Symbol import *
 from functools import *
 
+# def getList(lists, scopes, symbols):
+#     if not scopes:
+#         return lists
+#     scope = scopes[-1]
+#     keys = list(scope.keys())
+#     for key in reversed(keys):
+#         if any(sym.name == key for sym in symbols):
+#             lists.insert(0, f"{key}//{len(scopes) - 1}")
+#             symbols = [s for s in symbols if s.name != key]
+#     return getList(lists, scopes[:-1], symbols)
+def process_keys(i, keys, scopes, symbols, lists):
+    if i < 0:
+        return lists, symbols
+    key = keys[i]
+    if any(sym.name == key for sym in symbols):
+        lists.insert(0, f"{key}//{len(scopes) - 1}")
+        symbols = [s for s in symbols if s.name != key]
+    return process_keys(i - 1, keys, scopes, symbols, lists)
+
+def getList(lists, scopes, symbols):
+    if not scopes:
+        return lists
+    scope = scopes[-1]
+    keys = list(scope.keys())
+    lists, symbols = process_keys(len(keys) - 1, keys, scopes, symbols, lists)
+    return getList(lists, scopes[:-1], symbols)
+
 def getIndex(scopes, name) -> int:
     if not scopes:
         return -1
@@ -28,8 +55,6 @@ def assign_all_scopes(scopes, name, value) -> int:
         return 3 
     return assign_all_scopes(scopes[:-1], name, value) or 0
 def check_redeclare(symbols, scopes, name):
-    if len(scopes) > 1 and name in scopes[-1]:
-        return False
     return name in scopes[-1] if scopes else False
 
 def is_valid_identifier(name: str) -> bool:
@@ -88,48 +113,17 @@ def process_command(command, symbols, scopes):
         scope_index = getIndex(scopes, name)  
         
         if scope_index != -1:
-            return scope_index, symbols, scopes 
+            return str(scope_index), symbols, scopes 
         else:
             return Undeclared(command), symbols, scopes
-    elif parts[0] == "RPRINT":
-        if len(parts) != 1:
-            return InvalidInstruction(command), symbols, scopes
-        
-        output = []
-        # Iterate through scopes from innermost to outermost
-        for level, scope in enumerate(reversed(scopes)):
-            # Get all identifiers in current scope
-            for name in scope:
-                output.append(f"{name}//{len(scopes)-1-level}")
-        
-        if not output:
-            return "", symbols, scopes  # No identifiers to print
-        else:
-            # Join with space and print (or return as part of your output handling)
-            print(" ".join(output))
-            return "success", symbols, scopes
     elif parts[0] == "PRINT":
-        if len(parts) != 1:
-            return InvalidInstruction(command), symbols, scopes
-        
-        # Collect visible identifiers (respecting shadowing)
-        visible = {}
-        for level, scope in enumerate(scopes):
-            for name in scope:
-                visible[name] = level  # Later scopes will overwrite shadowed variables
-        
-        # Get all symbols in original declaration order
-        ordered_output = []
-        for sym in symbols:
-            if sym["name"] in visible:
-                ordered_output.append(f"{sym['name']}//{visible[sym['name']]}")
-        
-        if not ordered_output:
-            return "", symbols, scopes
-        else:
-            print(" ".join(ordered_output))
-            return "success", symbols, scopes
-        
+        lists = getList([], scopes, symbols)
+        result = " ".join(lists)
+        return result, symbols, scopes
+    elif parts[0] == "RPRINT":
+        lists = reversed(getList([], scopes, symbols))
+        result = " ".join(lists)
+        return result, symbols, scopes
 
 def process_commands(commands, result_list, symbols, scopes):
     if not commands:
