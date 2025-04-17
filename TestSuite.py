@@ -86,3 +86,85 @@ class TestSymbolTable(unittest.TestCase):
         expected = ["success", "success", "success", "success", "z//1 x//1 y//0"]
 
         self.assertTrue(TestUtils.check(input, expected, 106))
+
+    def test_7(self):
+        input = [
+            "ASSIGN x 4"
+        ]
+        expected = ["Undeclared: ASSIGN x 4"]
+        self.assertTrue(TestUtils.check(input, expected, 107))
+    def test_8(self):
+        input = [
+            "INSERT a number",
+            "INSERT b string",
+            "BEGIN",
+            "INSERT a string",  # shadowing
+            "INSERT c number",
+            "PRINT",
+            "END",
+            "PRINT"
+        ]
+        expected = [
+            "success", "success", "success", "success", "b//0 a//1 c//1", "a//0 b//0"
+        ]
+        self.assertTrue(TestUtils.check(input, expected, 108))
+    def test_9(self):
+        input = [
+            "INSERT a number",
+            "INSERT b string",
+            "ASSIGN a 42",
+            "ASSIGN b 'hello'",
+            "ASSIGN b 42",
+            "ASSIGN a 'wrong'"
+        ]
+        expected = [
+            "success", "success", "success", "success",
+            "TypeMismatch: ASSIGN b 42", "TypeMismatch: ASSIGN a 'wrong'"
+        ]
+        self.assertTrue(TestUtils.check(input, expected, 109))
+    def test_10(self):
+        input = [
+            "INSERT a number",
+            "BEGIN",
+            "INSERT b string",
+            "BEGIN",
+            "INSERT c number",
+            "LOOKUP a",
+            "LOOKUP b",
+            "LOOKUP c",
+            "END",
+            "LOOKUP c",
+            "END",
+            "LOOKUP b"
+        ]
+        expected = [
+            "success", "success", "success", "0", "1", "2", "Undeclared: LOOKUP c", "Undeclared: LOOKUP b"
+        ]
+        self.assertTrue(TestUtils.check(input, expected, 110))
+    def test_11(self):
+        input = [
+            "END"
+        ]
+        expected = [
+            "UnknownBlock"
+        ]
+        self.assertTrue(TestUtils.check(input, expected, 111))
+    def test_12(self):
+        input = [
+            "INSERT x number",
+            "BEGIN",
+            "INSERT x string",
+            "INSERT y number",
+            "BEGIN",
+            "INSERT z string",
+            "PRINT"
+        ]
+        expected = [
+            "success", "Reclared: INSERT x string", "success", "success", "x//2 y//1 z//2"
+        ]
+        
+        self.assertTrue(TestUtils.check(input, expected, 112))
+    
+
+
+

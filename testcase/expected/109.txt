@@ -1,0 +1,6 @@
+success
+success
+success
+success
+TypeMismatch: ASSIGN b 42
+TypeMismatch: ASSIGN a 'wrong'

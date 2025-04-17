@@ -1,0 +1,6 @@
+INSERT a number
+INSERT b string
+ASSIGN a 42
+ASSIGN b 'hello'
+ASSIGN b 42
+ASSIGN a 'wrong'

@@ -127,6 +127,8 @@ def process_command(command, symbols, scopes):
 
 def process_commands(commands, result_list, symbols, scopes):
     if not commands:
+        if len(scopes) > 1:
+            return process_commands(commands, result_list + [str(UnclosedBlock((len(scopes)-1)))], symbols, [{}])
         return result_list
     result, new_symbols, new_scopes = process_command(commands[0], symbols, scopes)
     formatted_result = str(result) if isinstance(result, StaticError) else result
@@ -142,3 +144,10 @@ def process_commands(commands, result_list, symbols, scopes):
 
 def simulate(list_of_commands):
     return process_commands(list_of_commands, [], [], [{}])
+print(simulate(["INSERT x number",
+            "BEGIN",
+            "INSERT x string",
+            "INSERT y number",
+            "BEGIN",
+            "INSERT z string",
+            "PRINT"]))
