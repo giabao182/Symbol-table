@@ -45,17 +45,39 @@ def assign_all_scopes(scopes, name, value) -> int:
         declared_type = current_scope[name]["type"] 
         
         if declared_type == "number":
-            if not value.isdigit():
-                return 1 
+             if not (len(value) > 0 and all(c in "0123456789" for c in value)):
+                return 1
         elif declared_type == "string":
-            if value.isdigit():
-                return 1 
+            if len(value) < 2 or value[0] != "'" or value[-1] != "'":
+                return 1
+            inside = value[1:-1]
+            for c in inside:
+                if not (c.isalnum() or c == ' '): 
+                    return 1
         
         current_scope[name]["value"] = value 
         return 3 
     return assign_all_scopes(scopes[:-1], name, value) or 0
-def check_redeclare(symbols, scopes, name):
-    return name in scopes[-1] if scopes else False
+
+# def check_redeclare(scopes, name, declared_type):
+#     if name in scopes[-1]:
+#         return True 
+#     for scope in reversed(scopes[:-1]):
+#         if name in scope:
+#             return scope[name]["type"] != declared_type
+    
+#     return False 
+def check_redeclare(scopes, name, declared_type):
+    if not scopes:
+        return False
+    if name in scopes[-1]:
+        return True
+    if len(scopes) == 1:
+        return False
+    if name in scopes[-2]:
+        return scopes[-2][name]["type"] != declared_type
+    
+    return check_redeclare(scopes[:-1], name, declared_type)
 
 def is_valid_identifier(name: str) -> bool:
     return (name and name[0].islower() and all(c.isalnum() or c == '_' for c in name))
@@ -73,7 +95,7 @@ def process_command(command, symbols, scopes):
     if parts[0] == "INSERT":
         if not check_insert_format(command):
             return InvalidInstruction(command), symbols, scopes
-        if check_redeclare(symbols, scopes, parts[1]):
+        if check_redeclare(scopes, parts[1],parts[2]):
             return Redeclared(command), symbols, scopes
         symbols.append(Symbol(parts[1], parts[2]))
         scopes[-1][parts[1]] = {"type": parts[2], "value": None}
@@ -144,10 +166,3 @@ def process_commands(commands, result_list, symbols, scopes):
 
 def simulate(list_of_commands):
     return process_commands(list_of_commands, [], [], [{}])
-print(simulate(["INSERT x number",
-            "BEGIN",
-            "INSERT x string",
-            "INSERT y number",
-            "BEGIN",
-            "INSERT z string",
-            "PRINT"]))

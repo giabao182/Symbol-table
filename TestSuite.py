@@ -105,7 +105,7 @@ class TestSymbolTable(unittest.TestCase):
             "PRINT"
         ]
         expected = [
-            "success", "success", "success", "success", "b//0 a//1 c//1", "a//0 b//0"
+            "success", "success", "Redeclared: INSERT a string", "success", "a//0 b//0 c//1", "a//0 b//0"
         ]
         self.assertTrue(TestUtils.check(input, expected, 108))
     def test_9(self):
@@ -157,11 +157,23 @@ class TestSymbolTable(unittest.TestCase):
             "INSERT y number",
             "BEGIN",
             "INSERT z string",
-            "PRINT"
+            "PRINT",
+            "BEGIN"
         ]
         expected = [
-            "success", "Reclared: INSERT x string", "success", "success", "x//2 y//1 z//2"
+            "success", "Redeclared: INSERT x string", "success", "success", "x//0 y//1 z//2", "UnclosedBlock: 3"
         ]
+        print(simulate([
+            "INSERT x number",
+            "BEGIN",
+            "INSERT x string",
+            "INSERT y number",
+            "BEGIN",
+            "INSERT z string",
+            "PRINT",
+            "BEGIN"
+        ]))
+
         
         self.assertTrue(TestUtils.check(input, expected, 112))
     
