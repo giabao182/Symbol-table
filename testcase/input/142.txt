@@ -1,0 +1,6 @@
+INSERT a number
+INSERT b number
+INSERT c number
+ASSIGN c 5
+ASSIGN b c
+ASSIGN a b

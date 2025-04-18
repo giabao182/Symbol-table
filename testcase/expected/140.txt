@@ -1,0 +1,6 @@
+success
+success
+Redeclared: INSERT id string
+TypeMismatch: ASSIGN id 'abc'
+0
+TypeMismatch: ASSIGN id 'xyz'

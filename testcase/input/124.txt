@@ -1,0 +1,10 @@
+INSERT x number
+BEGIN
+INSERT x string
+BEGIN
+INSERT x number
+PRINT
+END
+PRINT
+END
+PRINT

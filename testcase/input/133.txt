@@ -1,0 +1,12 @@
+INSERT a number
+BEGIN
+INSERT b number
+BEGIN
+INSERT c number
+LOOKUP a
+LOOKUP b
+LOOKUP c
+END
+LOOKUP c
+END
+LOOKUP b

@@ -1,0 +1,4 @@
+success
+success
+success
+TypeMismatch: ASSIGN a b

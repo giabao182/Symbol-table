@@ -1,0 +1,13 @@
+INSERT x number
+ASSIGN x 1
+BEGIN
+INSERT x number
+ASSIGN x 2
+BEGIN
+INSERT x number
+ASSIGN x 3
+LOOKUP x
+END
+LOOKUP x
+END
+LOOKUP x

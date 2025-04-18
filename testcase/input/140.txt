@@ -1,0 +1,8 @@
+INSERT id number
+ASSIGN id 10
+BEGIN
+INSERT id string
+ASSIGN id 'abc'
+LOOKUP id
+END
+ASSIGN id 'xyz'

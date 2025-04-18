@@ -1,0 +1,5 @@
+success
+success
+Redeclared: INSERT x string
+TypeMismatch: ASSIGN x x
+TypeMismatch: ASSIGN x x

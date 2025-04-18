@@ -1,0 +1,4 @@
+BEGIN
+INSERT temp number
+END
+LOOKUP temp

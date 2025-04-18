@@ -1,0 +1,13 @@
+INSERT a number
+ASSIGN a 1
+BEGIN
+BEGIN
+INSERT b number
+ASSIGN b 10
+BEGIN
+INSERT c number
+ASSIGN c 20
+LOOKUP c
+END
+END
+END

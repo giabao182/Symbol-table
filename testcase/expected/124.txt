@@ -1,0 +1,6 @@
+success
+Redeclared: INSERT x string
+success
+x//2
+x//0
+x//0
