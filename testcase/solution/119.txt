@@ -1,0 +1,6 @@
+success
+success
+success
+success
+Undeclared: LOOKUP y
+0

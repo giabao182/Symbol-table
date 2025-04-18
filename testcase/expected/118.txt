@@ -1,0 +1,6 @@
+success
+success
+Redeclared: INSERT a string
+TypeMismatch: ASSIGN a 'hello'
+success
+success

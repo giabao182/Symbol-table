@@ -2,16 +2,6 @@ from StaticError import *
 from Symbol import *
 from functools import *
 
-# def getList(lists, scopes, symbols):
-#     if not scopes:
-#         return lists
-#     scope = scopes[-1]
-#     keys = list(scope.keys())
-#     for key in reversed(keys):
-#         if any(sym.name == key for sym in symbols):
-#             lists.insert(0, f"{key}//{len(scopes) - 1}")
-#             symbols = [s for s in symbols if s.name != key]
-#     return getList(lists, scopes[:-1], symbols)
 def process_keys(i, keys, scopes, symbols, lists):
     if i < 0:
         return lists, symbols
@@ -38,8 +28,13 @@ def getIndex(scopes, name) -> int:
         return getIndex(scopes[:-1],name)
 def assign_all_scopes(scopes, name, value) -> int:
     if not scopes:
-        return 0 
-    
+        if value[0] == "'" and value[-1] == "'":
+            if not all(c.isalnum() or c == ' ' for c in value[1:-1]):
+                return 4
+        elif value[0] != "'" or value[-1] != "'":
+            if not value.isdigit():
+                return 4
+        return 0
     current_scope = scopes[-1]
     if name in current_scope:
         declared_type = current_scope[name]["type"] 
@@ -51,22 +46,15 @@ def assign_all_scopes(scopes, name, value) -> int:
             if len(value) < 2 or value[0] != "'" or value[-1] != "'":
                 return 1
             inside = value[1:-1]
-            for c in inside:
-                if not (c.isalnum() or c == ' '): 
-                    return 1
-        
+            # for c in inside:
+            #     if not (c.isalnum() or c == ' '): 
+            #         return 1
+            if not all(c.isalnum() or c == ' ' for c in inside):
+                return 1
         current_scope[name]["value"] = value 
         return 3 
-    return assign_all_scopes(scopes[:-1], name, value) or 0
+    return assign_all_scopes(scopes[:-1], name, value)
 
-# def check_redeclare(scopes, name, declared_type):
-#     if name in scopes[-1]:
-#         return True 
-#     for scope in reversed(scopes[:-1]):
-#         if name in scope:
-#             return scope[name]["type"] != declared_type
-    
-#     return False 
 def check_redeclare(scopes, name, declared_type):
     if not scopes:
         return False
@@ -90,29 +78,31 @@ def process_command(command, symbols, scopes):
     parts = command.strip().split()
     
     if not parts:
-        return InvalidInstruction(command), symbols, scopes
+        raise InvalidInstruction(command)
 
     if parts[0] == "INSERT":
         if not check_insert_format(command):
-            return InvalidInstruction(command), symbols, scopes
+            raise InvalidInstruction(command)
         if check_redeclare(scopes, parts[1],parts[2]):
-            return Redeclared(command), symbols, scopes
+            raise Redeclared(command)
         symbols.append(Symbol(parts[1], parts[2]))
         scopes[-1][parts[1]] = {"type": parts[2], "value": None}
         return "success", symbols, scopes
 
     elif parts[0] == "ASSIGN":
         if len(parts) < 3 or not is_valid_identifier(parts[1]):
-            return InvalidInstruction(command), symbols, scopes
+            raise InvalidInstruction(command)
         
         name = parts[1]
         value = parts[2]
         result = assign_all_scopes(scopes, name, value)
         
         if result == 0:
-            return Undeclared(command), symbols, scopes
+            raise Undeclared(command)
         elif result == 1:
-            return TypeMismatch(command), symbols, scopes
+            raise TypeMismatch(command)
+        elif result == 4:
+            raise InvalidInstruction(command)
         else:
             return "success", symbols, scopes
 
@@ -125,11 +115,11 @@ def process_command(command, symbols, scopes):
             scopes.pop()
             return None, symbols, scopes
         else:
-            return UnknownBlock(), symbols, scopes
+            raise UnknownBlock()
 
     elif parts[0] == "LOOKUP":
         if len(parts) != 2:
-            return InvalidInstruction(command), symbols, scopes
+            raise InvalidInstruction(command)
         
         name = parts[1]
         scope_index = getIndex(scopes, name)  
@@ -137,7 +127,7 @@ def process_command(command, symbols, scopes):
         if scope_index != -1:
             return str(scope_index), symbols, scopes 
         else:
-            return Undeclared(command), symbols, scopes
+            raise Undeclared(command)
     elif parts[0] == "PRINT":
         lists = getList([], scopes, symbols)
         result = " ".join(lists)
@@ -152,17 +142,14 @@ def process_commands(commands, result_list, symbols, scopes):
         if len(scopes) > 1:
             return process_commands(commands, result_list + [str(UnclosedBlock((len(scopes)-1)))], symbols, [{}])
         return result_list
-    result, new_symbols, new_scopes = process_command(commands[0], symbols, scopes)
-    formatted_result = str(result) if isinstance(result, StaticError) else result
-    if formatted_result == None:
-        return process_commands(commands[1:], 
-                          result_list, 
-                          new_symbols, 
-                          new_scopes)
-    return process_commands(commands[1:], 
-                          result_list + [formatted_result], 
-                          new_symbols, 
-                          new_scopes)
+    try:
+        result, new_symbols, new_scopes = process_command(commands[0], symbols, scopes)
+        if result is None:
+            return process_commands(commands[1:], result_list, new_symbols, new_scopes)
+        return process_commands(commands[1:], result_list + [result], new_symbols, new_scopes)
+    except StaticError as e:
+        return process_commands(commands[1:], result_list + [str(e)], symbols, scopes)
 
 def simulate(list_of_commands):
     return process_commands(list_of_commands, [], [], [{}])
+print(simulate(["ASSIGN a 12a3 "]))

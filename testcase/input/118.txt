@@ -1,0 +1,8 @@
+INSERT a number
+ASSIGN a 1
+BEGIN
+INSERT a string
+ASSIGN a 'hello'
+ASSIGN a 100
+END
+ASSIGN a 5

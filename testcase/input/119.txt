@@ -1,0 +1,8 @@
+INSERT x number
+BEGIN
+INSERT y number
+ASSIGN x 10
+ASSIGN y 20
+END
+LOOKUP y
+LOOKUP x

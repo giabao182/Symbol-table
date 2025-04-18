@@ -1,0 +1,5 @@
+success
+Redeclared: INSERT a string
+0
+0
+0
