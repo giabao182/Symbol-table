@@ -56,16 +56,9 @@ def assign_all_scopes(scopes, name, value) -> int:
     return assign_all_scopes(scopes[:-1], name, value)
 
 def check_redeclare(scopes, name, declared_type):
-    if not scopes:
-        return False
     if name in scopes[-1]:
         return True
-    if len(scopes) == 1:
-        return False
-    if name in scopes[-2]:
-        return scopes[-2][name]["type"] != declared_type
-    
-    return check_redeclare(scopes[:-1], name, declared_type)
+    return False
 
 def is_valid_identifier(name: str) -> bool:
     return (name and name[0].islower() and all(c.isalnum() or c == '_' for c in name))

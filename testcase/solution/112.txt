@@ -1,6 +1,6 @@
 success
-Redeclared: INSERT x string
 success
 success
-x//0 y//1 z//2
+success
+x//1 y//1 z//2
 UnclosedBlock: 3

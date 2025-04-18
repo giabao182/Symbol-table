@@ -1,5 +1,5 @@
 success
 success
-Redeclared: INSERT x string
-TypeMismatch: ASSIGN x 'abc'
+success
+success
 success

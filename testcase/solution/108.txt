@@ -1,6 +1,6 @@
 success
 success
-Redeclared: INSERT a string
 success
-a//0 b//0 c//1
+success
+b//0 a//1 c//1
 a//0 b//0

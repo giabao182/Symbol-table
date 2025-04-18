@@ -105,7 +105,7 @@ class TestSymbolTable(unittest.TestCase):
             "PRINT"
         ]
         expected = [
-            "success", "success", "Redeclared: INSERT a string", "success", "a//0 b//0 c//1", "a//0 b//0"
+            "success", "success", "success", "success", "b//0 a//1 c//1", "a//0 b//0"
         ]
         self.assertTrue(TestUtils.check(input, expected, 108))
     def test_9(self):
@@ -161,7 +161,7 @@ class TestSymbolTable(unittest.TestCase):
             "BEGIN"
         ]
         expected = [
-            "success", "Redeclared: INSERT x string", "success", "success", "x//0 y//1 z//2", "UnclosedBlock: 3"
+            "success", "success", "success", "success", "x//1 y//1 z//2", "UnclosedBlock: 3"
         ]
         self.assertTrue(TestUtils.check(input, expected, 112))
     def test_13(self):
@@ -193,7 +193,7 @@ class TestSymbolTable(unittest.TestCase):
             "END"
         ]
         expected = [
-            "success", "success", "Redeclared: INSERT x string", "TypeMismatch: ASSIGN x 'abc'", "success"
+            "success", "success", "success", "success", "success"
         ]
         self.assertTrue(TestUtils.check(input, expected, 114))
 
@@ -212,7 +212,7 @@ class TestSymbolTable(unittest.TestCase):
             "END"
         ]
         expected = [
-            "success","Redeclared: INSERT a string","0","0","0"
+            "success","success","3","0","0"
         ]
         self.assertTrue(TestUtils.check(input, expected, 115))
 
@@ -265,7 +265,7 @@ class TestSymbolTable(unittest.TestCase):
             "ASSIGN a 5"
         ]
         expected = [
-            "success","success","Redeclared: INSERT a string","TypeMismatch: ASSIGN a 'hello'","success","success"
+            "success","success","success","success","TypeMismatch: ASSIGN a 100","success"
         ]
         self.assertTrue(TestUtils.check(input, expected, 118))
 
@@ -361,8 +361,8 @@ class TestSymbolTable(unittest.TestCase):
             "PRINT"
         ]
         expected = [
-            "success", "Redeclared: INSERT x string", "success",
-            "x//2", "x//0", "x//0"
+            "success", "success", "success",
+            "x//2", "x//1", "x//0"
         ]
         self.assertTrue(TestUtils.check(input, expected, 124))
     def test_25(self):
@@ -478,7 +478,7 @@ class TestSymbolTable(unittest.TestCase):
             "ASSIGN x x"
         ]
         expected = [
-            "success", "success", "Redeclared: INSERT x string",
+            "success", "success", "success",
             "TypeMismatch: ASSIGN x x", "TypeMismatch: ASSIGN x x"
         ]
         self.assertTrue(TestUtils.check(input, expected, 134))
@@ -554,7 +554,7 @@ class TestSymbolTable(unittest.TestCase):
         ]
         expected = [
             "success", "success",
-            "Redeclared: INSERT id string", "TypeMismatch: ASSIGN id 'abc'", "0",
+            "success", "success", "1",
             "TypeMismatch: ASSIGN id 'xyz'"
         ]
         self.assertTrue(TestUtils.check(input, expected, 140))

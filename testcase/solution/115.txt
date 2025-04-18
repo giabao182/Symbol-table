@@ -1,5 +1,5 @@
 success
-Redeclared: INSERT a string
-0
+success
+3
 0
 0
