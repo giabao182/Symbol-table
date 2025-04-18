@@ -145,4 +145,3 @@ def process_commands(commands, result_list, symbols, scopes):
 
 def simulate(list_of_commands):
     return process_commands(list_of_commands, [], [], [{}])
-print(simulate(["ASSIGN a 12a3 "]))
