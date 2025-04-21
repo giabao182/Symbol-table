@@ -1,1 +1,2 @@
-ASSIGN x 4
+INSERT a number
+INSERT b numberASSIGN a b

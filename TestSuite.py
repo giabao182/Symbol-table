@@ -89,9 +89,11 @@ class TestSymbolTable(unittest.TestCase):
 
     def test_7(self):
         input = [
-            "ASSIGN x 4"
+            "INSERT a number",
+            "INSERT b number"
+            "ASSIGN a b"
         ]
-        expected = ["Undeclared: ASSIGN x 4"]
+        expected = ["success"]*4
         self.assertTrue(TestUtils.check(input, expected, 107))
     def test_8(self):
         input = [

@@ -1,1 +1,2 @@
-Undeclared: ASSIGN x 4
+success
+Invalid: INSERT b numberASSIGN a b
