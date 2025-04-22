@@ -1,2 +1,3 @@
 INSERT a number
-INSERT b numberASSIGN a b
+INSERT b number
+ASSIGN a b

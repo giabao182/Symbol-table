@@ -1,2 +1,2 @@
 success
-TypeMismatch: ASSIGN x x
+success

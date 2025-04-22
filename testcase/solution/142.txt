@@ -2,5 +2,5 @@ success
 success
 success
 success
-TypeMismatch: ASSIGN b c
-TypeMismatch: ASSIGN a b
+success
+success

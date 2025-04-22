@@ -90,10 +90,15 @@ class TestSymbolTable(unittest.TestCase):
     def test_7(self):
         input = [
             "INSERT a number",
-            "INSERT b number"
+            "INSERT b number",
             "ASSIGN a b"
         ]
-        expected = ["success"]*4
+        expected = ["success"]*3
+        print(simulate([
+            "INSERT a number",
+            "INSERT b number",
+            "ASSIGN a b"
+        ]))
         self.assertTrue(TestUtils.check(input, expected, 107))
     def test_8(self):
         input = [
@@ -480,9 +485,8 @@ class TestSymbolTable(unittest.TestCase):
             "ASSIGN x x"
         ]
         expected = [
-            "success", "success", "success",
-            "TypeMismatch: ASSIGN x x", "TypeMismatch: ASSIGN x x"
-        ]
+            "success"
+        ] *5
         self.assertTrue(TestUtils.check(input, expected, 134))
 
     def test_35(self):
@@ -580,7 +584,7 @@ class TestSymbolTable(unittest.TestCase):
             "ASSIGN b c",
             "ASSIGN a b"
         ]
-        expected = ["success","success","success","success","TypeMismatch: ASSIGN b c","TypeMismatch: ASSIGN a b"] 
+        expected = ["success","success","success"] *2
         self.assertTrue(TestUtils.check(input, expected, 142))
 
     def test_43(self):
@@ -613,7 +617,7 @@ class TestSymbolTable(unittest.TestCase):
             "INSERT x number",
             "ASSIGN x x"
         ]
-        expected = ["success", "TypeMismatch: ASSIGN x x"]
+        expected = ["success"] *2
         self.assertTrue(TestUtils.check(input, expected, 146))
 
     def test_47(self):
