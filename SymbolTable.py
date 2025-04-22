@@ -154,8 +154,3 @@ def process_commands(commands, result_list, symbols, scopes):
 
 def simulate(list_of_commands):
     return process_commands(list_of_commands, [], [], [{}])
-print(simulate([
-            "INSERT a number",
-            "INSERT b number",
-            "ASSIGN a b"
-        ]))

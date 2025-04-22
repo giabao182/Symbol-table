@@ -94,11 +94,6 @@ class TestSymbolTable(unittest.TestCase):
             "ASSIGN a b"
         ]
         expected = ["success"]*3
-        print(simulate([
-            "INSERT a number",
-            "INSERT b number",
-            "ASSIGN a b"
-        ]))
         self.assertTrue(TestUtils.check(input, expected, 107))
     def test_8(self):
         input = [
@@ -690,3 +685,4 @@ class TestSymbolTable(unittest.TestCase):
             "2", "1", "0"
         ]
         self.assertTrue(TestUtils.check(input, expected, 150))
+        
