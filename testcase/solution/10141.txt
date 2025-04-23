@@ -1,1 +1,1 @@
-TypeMismatch: ASSIGN x bE_2
+Invalid: ASSIGN x bE_2

@@ -1,1 +1,1 @@
-TypeMismatch: ASSIGN x bc~ed
+Invalid: ASSIGN x bc~ed

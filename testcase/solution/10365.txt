@@ -1,2 +1,1 @@
-success
-x//0
+Invalid: RPRINT x

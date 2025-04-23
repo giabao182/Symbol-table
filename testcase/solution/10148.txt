@@ -1,1 +1,1 @@
-TypeMismatch: ASSIGN x number
+Invalid: ASSIGN x number

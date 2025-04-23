@@ -1,1 +1,1 @@
-Undeclared: LOOKUP bc@ed
+Invalid: LOOKUP bc@ed

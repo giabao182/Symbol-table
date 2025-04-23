@@ -1,1 +1,1 @@
-Undeclared: LOOKUP B2
+Invalid: LOOKUP B2

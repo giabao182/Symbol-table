@@ -1,1 +1,1 @@
-TypeMismatch: ASSIGN y string
+Invalid: ASSIGN y string

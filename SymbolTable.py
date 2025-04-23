@@ -35,6 +35,18 @@ def getIndex(scopes, name) -> int:
         return len(scopes) - 1
     else:
         return getIndex(scopes[:-1],name)
+    
+def if_value_is_variable(scopes,name,value) -> bool:
+    if not scopes: 
+        return False
+    current_scope = scopes[-1]
+    if value in current_scope:
+        declared_type = current_scope[value]["type"]
+        if (valid_assign_with_oldVariable(declared_type,value,scopes)):
+            return True
+        else: 
+            return False
+    if_value_is_variable(scopes[:-1], name, value)
 def assign_all_scopes(scopes, name, value) -> int:
     if not scopes:
         if value[0] == "'" and value[-1] == "'":
@@ -72,14 +84,27 @@ def check_redeclare(scopes, name):
 def is_valid_identifier(name: str) -> bool:
     return (name and name[0].islower() and all(c.isalnum() or c == '_' for c in name))
 
+def is_valid_value(value: str) -> bool:
+    if value[0] == "'" and value[-1] == "'":
+        if not all(c.isalnum() or c == ' ' for c in value[1:-1]):
+            return 0
+    else:
+        if not value.isdigit():
+            return 0
+    return 1
+    
+def count_spaces(s: str) -> int:
+    return s.count(' ')
+
 def check_insert_format(command: str) -> bool:
     parts = command.strip().split()
     return (len(parts) == 3 and parts[0] == "INSERT" and is_valid_identifier(parts[1]) and parts[2] in ["number", "string"])
 
 def process_command(command, symbols, scopes):
     parts = command.strip().split()
-    
-    if not parts:
+    numspaces = count_spaces(command)
+
+    if not parts or numspaces != len(parts) - 1:
         raise InvalidInstruction(command)
 
     if parts[0] == "INSERT":
@@ -94,9 +119,12 @@ def process_command(command, symbols, scopes):
     elif parts[0] == "ASSIGN":
         if len(parts) < 3 or not is_valid_identifier(parts[1]):
             raise InvalidInstruction(command)
-        
         name = parts[1]
         value = parts[2]
+        if if_value_is_variable(scopes,name,value):
+            return "success", symbols, scopes
+        # if not is_valid_value(value):
+        #     raise InvalidInstruction(command)
         result = assign_all_scopes(scopes, name, value)
         
         if result == 0:
@@ -120,7 +148,7 @@ def process_command(command, symbols, scopes):
             raise UnknownBlock()
 
     elif parts[0] == "LOOKUP":
-        if len(parts) != 2:
+        if len(parts) != 2 or not is_valid_identifier(parts[1]):
             raise InvalidInstruction(command)
         
         name = parts[1]
@@ -131,10 +159,14 @@ def process_command(command, symbols, scopes):
         else:
             raise Undeclared(command)
     elif parts[0] == "PRINT":
+        if len(parts) > 1:
+            raise InvalidInstruction(command)
         lists = getList([], scopes, symbols)
         result = " ".join(lists)
         return result, symbols, scopes
     elif parts[0] == "RPRINT":
+        if len(parts) > 1:
+            raise InvalidInstruction(command)
         lists = reversed(getList([], scopes, symbols))
         result = " ".join(lists)
         return result, symbols, scopes
@@ -169,3 +201,4 @@ def process_commands(commands, result_list, symbols, scopes):
 
 def simulate(list_of_commands):
     return process_commands(list_of_commands, [], [], [{}])
+print(simulate(["BEGIN", "INSERT x number", "INSERT y number", "ASSIGN x y", "END", "BEGIN", "INSERT x number", "INSERT y number", "ASSIGN y x", "END", "ASSIGN x y"]))
