@@ -1,0 +1,14 @@
+INSERT y number
+INSERT x string
+INSERT z number
+BEGIN
+INSERT y number
+INSERT x string
+INSERT z number
+BEGIN
+INSERT y number
+INSERT x string
+INSERT z number
+END
+END
+LOOKUP x

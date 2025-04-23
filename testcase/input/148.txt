@@ -1,7 +1,0 @@
-INSERT x number
-BEGIN
-INSERT y number
-ASSIGN y 10
-ASSIGN x y
-END
-ASSIGN y 100

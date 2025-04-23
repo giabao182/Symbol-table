@@ -1,0 +1,11 @@
+INSERT x string
+INSERT y string
+BEGIN
+BEGIN
+INSERT x string
+INSERT y string
+END
+INSERT x string
+INSERT y string
+RPRINT
+END

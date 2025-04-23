@@ -1,0 +1,3 @@
+INSERT x number
+BEGIN
+END x

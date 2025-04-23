@@ -1,8 +1,0 @@
-BEGIN
-INSERT a number
-BEGIN
-INSERT a number
-ASSIGN a 1
-END
-ASSIGN a 'str'
-END

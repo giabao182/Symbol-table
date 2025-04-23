@@ -1,2 +1,0 @@
-success
-TypeMismatch: ASSIGN s 42

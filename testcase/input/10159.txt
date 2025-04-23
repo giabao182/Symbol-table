@@ -1,0 +1,3 @@
+INSERT x string
+INSERT y string
+ASSIGN  x y

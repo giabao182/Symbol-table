@@ -1,6 +1,0 @@
-INSERT a number
-INSERT b string
-ASSIGN a 123
-ASSIGN b 'abc'
-ASSIGN b a
-ASSIGN a b

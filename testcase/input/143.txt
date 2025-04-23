@@ -1,4 +1,0 @@
-INSERT a number
-INSERT b string
-ASSIGN b 'hello'
-ASSIGN a b

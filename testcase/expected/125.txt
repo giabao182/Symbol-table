@@ -1,2 +1,0 @@
-success
-Undeclared: ASSIGN x 5

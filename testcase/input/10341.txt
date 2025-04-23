@@ -1,0 +1,5 @@
+BEGIN
+INSERT x string
+INSERT y string
+PRINT
+END

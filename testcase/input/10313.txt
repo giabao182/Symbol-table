@@ -1,0 +1,6 @@
+BEGIN
+BEGIN
+INSERT x number
+END
+LOOKUP x
+END

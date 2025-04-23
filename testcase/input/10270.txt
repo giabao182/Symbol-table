@@ -1,0 +1,12 @@
+INSERT x number
+BEGIN
+INSERT x number
+BEGIN
+END
+END
+BEGIN
+INSERT x number
+BEGIN
+INSERT x number
+END
+ASSIGN x '1'

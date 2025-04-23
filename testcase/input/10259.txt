@@ -1,0 +1,13 @@
+INSERT x number
+INSERT y number
+BEGIN
+INSERT x number
+INSERT y number
+ASSIGN x y
+END
+BEGIN
+INSERT x number
+INSERT y number
+ASSIGN y x
+END
+ASSIGN x y

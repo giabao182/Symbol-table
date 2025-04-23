@@ -1,0 +1,1 @@
+Invalid: ASSIGN B2 1

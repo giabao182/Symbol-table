@@ -1,8 +1,0 @@
-INSERT a number
-INSERT b string
-BEGIN
-INSERT a string
-INSERT c number
-PRINT
-END
-PRINT

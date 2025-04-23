@@ -1,6 +1,0 @@
-BEGIN
-INSERT a number
-ASSIGN a 5
-END
-INSERT b number
-ASSIGN b a

@@ -1,6 +1,0 @@
-success
-success
-success
-x//2
-x//1
-x//0

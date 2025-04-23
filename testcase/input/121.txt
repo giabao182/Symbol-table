@@ -1,9 +1,0 @@
-BEGIN
-BEGIN
-INSERT a number
-BEGIN
-INSERT b string
-END
-ASSIGN b 'test'
-END
-END

@@ -1,0 +1,5 @@
+INSERT x number
+BEGIN
+INSERT x number
+BEGIN
+ASSIGN x '1'

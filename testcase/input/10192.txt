@@ -1,0 +1,5 @@
+INSERT x string
+BEGIN
+INSERT x string
+ASSIGN x 1
+END

@@ -1,0 +1,8 @@
+BEGIN
+BEGIN
+INSERT y number
+INSERT x string
+INSERT z number
+END
+LOOKUP x
+END

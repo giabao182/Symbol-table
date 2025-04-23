@@ -138,11 +138,25 @@ def process_command(command, symbols, scopes):
         lists = reversed(getList([], scopes, symbols))
         result = " ".join(lists)
         return result, symbols, scopes
+    else: 
+        raise InvalidInstruction(command)
 
+# def process_commands(commands, result_list, symbols, scopes):
+#     if not commands:
+#         if len(scopes) > 1:
+#             return process_commands(commands, result_list + [str(UnclosedBlock((len(scopes)-1)))], symbols, [{}])
+#         return result_list
+#     try:
+#         result, new_symbols, new_scopes = process_command(commands[0], symbols, scopes)
+#         if result is None:
+#             return process_commands(commands[1:], result_list, new_symbols, new_scopes)
+#         return process_commands(commands[1:], result_list + [result], new_symbols, new_scopes)
+#     except StaticError as e:
+#         return process_commands(commands[1:], result_list + [str(e)], symbols, scopes)
 def process_commands(commands, result_list, symbols, scopes):
     if not commands:
         if len(scopes) > 1:
-            return process_commands(commands, result_list + [str(UnclosedBlock((len(scopes)-1)))], symbols, [{}])
+            return [str(UnclosedBlock(len(scopes) - 1))]  
         return result_list
     try:
         result, new_symbols, new_scopes = process_command(commands[0], symbols, scopes)
@@ -150,7 +164,8 @@ def process_commands(commands, result_list, symbols, scopes):
             return process_commands(commands[1:], result_list, new_symbols, new_scopes)
         return process_commands(commands[1:], result_list + [result], new_symbols, new_scopes)
     except StaticError as e:
-        return process_commands(commands[1:], result_list + [str(e)], symbols, scopes)
+        return [str(e)]  
+
 
 def simulate(list_of_commands):
     return process_commands(list_of_commands, [], [], [{}])

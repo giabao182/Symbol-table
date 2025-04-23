@@ -1,0 +1,8 @@
+INSERT x number
+BEGIN
+INSERT x number
+BEGIN
+INSERT x number
+END
+END
+INSERT x number

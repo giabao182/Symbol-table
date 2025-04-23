@@ -1,9 +1,0 @@
-INSERT x number
-BEGIN
-INSERT y string
-BEGIN
-INSERT x string
-ASSIGN x 'abc'
-END
-ASSIGN x 123
-END

@@ -1,0 +1,3 @@
+INSERT number number
+INSERT string string
+ASSIGN string number

@@ -1,0 +1,1 @@
+Invalid: ASSIGN bc@ed 1

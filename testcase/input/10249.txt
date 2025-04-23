@@ -1,0 +1,7 @@
+INSERT x number
+BEGIN
+INSERT y number
+BEGIN
+ASSIGN x y
+END
+END

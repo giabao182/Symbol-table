@@ -1,7 +1,0 @@
-INSERT x number
-ASSIGN x 1
-BEGIN
-INSERT x string
-ASSIGN x x
-END
-ASSIGN x x
