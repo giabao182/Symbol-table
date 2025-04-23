@@ -1,1 +1,4 @@
-TypeMismatch: ASSIGN x y
+success
+success
+success
+success

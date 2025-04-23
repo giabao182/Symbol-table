@@ -1,16 +1,7 @@
 from StaticError import *
 from Symbol import *
 from functools import *
-def valid_assign_with_oldVariable(type, name,scopes):
-    if not scopes:
-        return False
-    if name in scopes[-1]:
-        if type == scopes[-1][name]["type"]:
-            return True
-        else:
-            return False
-    else:
-        return valid_assign_with_oldVariable(type,name,scopes[:-1])
+
 def process_keys(i, keys, scopes, symbols, lists):
     if i < 0:
         return lists, symbols
@@ -35,46 +26,53 @@ def getIndex(scopes, name) -> int:
         return len(scopes) - 1
     else:
         return getIndex(scopes[:-1],name)
-    
-def if_value_is_variable(scopes,name,value) -> bool:
-    if not scopes: 
-        return False
-    current_scope = scopes[-1]
-    if value in current_scope:
-        declared_type = current_scope[value]["type"]
-        if (valid_assign_with_oldVariable(declared_type,value,scopes)):
-            return True
-        else: 
-            return False
-    if_value_is_variable(scopes[:-1], name, value)
-def assign_all_scopes(scopes, name, value) -> int:
+
+def valid_assign_with_oldVariable(type, name,scopes):
     if not scopes:
-        if value[0] == "'" and value[-1] == "'":
-            if not all(c.isalnum() or c == ' ' for c in value[1:-1]):
-                return 4
-        elif value[0] != "'" or value[-1] != "'":
-            if not value.isdigit():
-                return 4
-        return 0
+        return False
+    if name in scopes[-1]:
+        if type == scopes[-1][name]["type"]:
+            return True
+        else:
+            return False
+    else:
+        return valid_assign_with_oldVariable(type,name,scopes[:-1])
+
+def assign_all_scopes(scopes, name, value,originscopes) -> int:
+    if not scopes:
+        return 0 #Undeclare
     current_scope = scopes[-1]
     if name in current_scope:
         declared_type = current_scope[name]["type"] 
-
-        if (valid_assign_with_oldVariable(declared_type,value,scopes)):
-            return 3
+        
+        value_index = getIndex(originscopes, value)
+        if value_index != -1:
+            value_type = originscopes[value_index][value]["type"]
+            if declared_type == value_type:
+                current_scope[name]["value"] = value
+                return 3  # success
+            else:
+                return 1  # type mismatch
         
         if declared_type == "number":
-            if not (len(value) > 0 and all(c in "0123456789" for c in value)):
-                return 1
+            if (len(value) > 0 and all(c in "0123456789" for c in value)):
+                current_scope[name]["value"] = value 
+                return 3 #success
+            if len(value) >2 and value[0] == "'" and value[-1] == "'":   
+                inside = value[1:-1]
+                if all(c.isalnum() or c == ' ' for c in inside):
+                    return 1 #typeMis
         elif declared_type == "string":
-            if len(value) < 2 or value[0] != "'" or value[-1] != "'":
-                return 1
-            inside = value[1:-1]
-            if not all(c.isalnum() or c == ' ' for c in inside):
-                return 1
-        current_scope[name]["value"] = value 
-        return 3 
-    return assign_all_scopes(scopes[:-1], name, value)
+            if len(value) >2 and value[0] == "'" and value[-1] == "'":   
+                inside = value[1:-1]
+                if all(c.isalnum() or c == ' ' for c in inside):
+                    current_scope[name]["value"] = value 
+                    return 3 #success
+            if (len(value) > 0 and all(c in "0123456789" for c in value)):
+                current_scope[name]["value"] = value 
+                return 1 #typeMis
+        return 2
+    return assign_all_scopes(scopes[:-1], name, value,originscopes)
 
 def check_redeclare(scopes, name):
     if name in scopes[-1]:
@@ -121,26 +119,25 @@ def process_command(command, symbols, scopes):
             raise InvalidInstruction(command)
         name = parts[1]
         value = parts[2]
-        if if_value_is_variable(scopes,name,value):
-            return "success", symbols, scopes
-        # if not is_valid_value(value):
-        #     raise InvalidInstruction(command)
-        result = assign_all_scopes(scopes, name, value)
-        
+        result = assign_all_scopes(scopes, name, value,scopes)
         if result == 0:
             raise Undeclared(command)
         elif result == 1:
             raise TypeMismatch(command)
-        elif result == 4:
+        elif result == 2:
             raise InvalidInstruction(command)
         else:
             return "success", symbols, scopes
 
     elif parts[0] == "BEGIN":
+        if len(parts) > 1: 
+            raise InvalidInstruction(command)
         scopes.append({})
         return None, symbols, scopes
 
     elif parts[0] == "END":
+        if len(parts) > 1: 
+            raise InvalidInstruction(command)
         if len(scopes) > 1:
             scopes.pop()
             return None, symbols, scopes
@@ -201,4 +198,4 @@ def process_commands(commands, result_list, symbols, scopes):
 
 def simulate(list_of_commands):
     return process_commands(list_of_commands, [], [], [{}])
-print(simulate(["BEGIN", "INSERT x number", "INSERT y number", "ASSIGN x y", "END", "BEGIN", "INSERT x number", "INSERT y number", "ASSIGN y x", "END", "ASSIGN x y"]))
+print(simulate(["INSERT x string", "INSERT y string", "BEGIN", "INSERT y number", "ASSIGN x y", "END"]))

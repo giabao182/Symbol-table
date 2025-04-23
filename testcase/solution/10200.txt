@@ -1,4 +1,1 @@
-success
-success
-success
-success
+TypeMismatch: ASSIGN x y

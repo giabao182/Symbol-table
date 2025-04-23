@@ -1,1 +1,1 @@
-Invalid: ASSIGN y x
+Undeclared: ASSIGN y x

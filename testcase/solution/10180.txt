@@ -1,1 +1,1 @@
-success
+Invalid: BEGIN x
