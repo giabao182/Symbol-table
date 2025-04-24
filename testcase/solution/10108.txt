@@ -1,1 +1,1 @@
-Invalid: ASSIGN y string
+Undeclared: ASSIGN y string

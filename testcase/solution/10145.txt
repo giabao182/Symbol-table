@@ -1,1 +1,1 @@
-Invalid: ASSIGN x b2_
+Undeclared: ASSIGN x b2_

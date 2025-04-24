@@ -42,7 +42,9 @@ def check_assign(scopes, name, value,originscopes) -> int:
                 return 3  # success
             else:
                 return 1  # type mismatch
-        
+        if is_valid_identifier(value):
+            return 0
+
         if declared_type == "number":
             if (len(value) > 0 and all(c in "0123456789" for c in value)):
                 current_scope[name]["value"] = value 
