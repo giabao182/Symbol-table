@@ -7,7 +7,7 @@ def process_keys(i, keys, scopes, symbols, lists):
         return lists, symbols
     key = keys[i]
     if any(sym.name == key for sym in symbols):
-        lists.insert(0, f"{key}//{len(scopes) - 1}")
+        lists = [f"{key}//{len(scopes) - 1}"] + lists
         symbols = [s for s in symbols if s.name != key]
     return process_keys(i - 1, keys, scopes, symbols, lists)
 
@@ -50,13 +50,11 @@ def check_assign(scopes, name, value,originscopes) -> int:
                 current_scope[name]["value"] = value 
                 return 3 #success
             if len(value) >2 and value[0] == "'" and value[-1] == "'":   
-                inside = value[1:-1]
-                if all(c.isalnum() or c == ' ' for c in inside):
+                if all(c.isalnum() or c == ' ' for c in value[1:-1]):
                     return 1 #typeMis
         elif declared_type == "string":
             if len(value) >2 and value[0] == "'" and value[-1] == "'":   
-                inside = value[1:-1]
-                if all(c.isalnum() or c == ' ' for c in inside):
+                if all(c.isalnum() or c == ' ' for c in value[1:-1]):
                     current_scope[name]["value"] = value 
                     return 3 #success
             if (len(value) > 0 and all(c in "0123456789" for c in value)):
@@ -80,16 +78,13 @@ def process_command(command, symbols, scopes):
             raise InvalidInstruction(command)
         if parts[1] in scopes[-1]:
             raise Redeclared(command)
-        symbols.append(Symbol(parts[1], parts[2]))
-        scopes[-1][parts[1]] = {"type": parts[2], "value": None}
-        return "success", symbols, scopes
+        symbols = symbols + [Symbol(parts[1], parts[2])]
+        return "success", symbols, scopes[:-1] + [{**scopes[-1], parts[1]: {"type": parts[2], "value": None}}]
 
     elif parts[0] == "ASSIGN":
         if len(parts) < 3 or not is_valid_identifier(parts[1]):
             raise InvalidInstruction(command)
-        name = parts[1]
-        value = parts[2]
-        result = check_assign(scopes, name, value,scopes)
+        result = check_assign(scopes, parts[1], parts[2],scopes)
         if result == 0:
             raise Undeclared(command)
         elif result == 1:
@@ -102,15 +97,13 @@ def process_command(command, symbols, scopes):
     elif parts[0] == "BEGIN":
         if len(parts) > 1: 
             raise InvalidInstruction(command)
-        scopes.append({})
-        return None, symbols, scopes
+        return None, symbols, scopes + [{}]
 
     elif parts[0] == "END":
         if len(parts) > 1: 
             raise InvalidInstruction(command)
         if len(scopes) > 1:
-            scopes.pop()
-            return None, symbols, scopes
+            return None, symbols, scopes[:-1]
         else:
             raise UnknownBlock()
 
@@ -118,8 +111,7 @@ def process_command(command, symbols, scopes):
         if len(parts) != 2 or not is_valid_identifier(parts[1]):
             raise InvalidInstruction(command)
         
-        name = parts[1]
-        scope_index = getIndex(scopes, name)  
+        scope_index = getIndex(scopes, parts[1])  
         
         if scope_index != -1:
             return str(scope_index), symbols, scopes 
@@ -128,15 +120,11 @@ def process_command(command, symbols, scopes):
     elif parts[0] == "PRINT":
         if len(parts) > 1:
             raise InvalidInstruction(command)
-        lists = getList([], scopes, symbols)
-        result = " ".join(lists)
-        return result, symbols, scopes
+        return " ".join(getList([], scopes, symbols)), symbols, scopes
     elif parts[0] == "RPRINT":
         if len(parts) > 1:
             raise InvalidInstruction(command)
-        lists = reversed(getList([], scopes, symbols))
-        result = " ".join(lists)
-        return result, symbols, scopes
+        return " ".join(list(reversed(getList([], scopes, symbols)))), symbols, scopes
     else: 
         raise InvalidInstruction(command)
 
